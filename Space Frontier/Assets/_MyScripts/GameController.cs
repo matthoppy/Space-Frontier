@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject asteroid;
+    public GameObject asteroid = null;
     //asteroidPosition is used to set the position where the obstacle was generated
     public Vector3 asteroidPosition;
     //startWait is used to set the preparation time to start generating obstacles
@@ -19,15 +19,19 @@ public class GameController : MonoBehaviour
     GameObject[] pauseObjects;
     GameObject[] finishObjects;
     PlayerController playerController;
+	public UnityEngine.UI.Text scoreText;
+	private int score;
+    public int initialScore = 0;
+    public int tScale = 1;
 
     void Start()
     {
         StartCoroutine (Waves ());
-
+		score = initialScore;
+		UpdateScore();
         //No text should appear at the beginning of the game
         gameOverText.text = "";
-
-        Time.timeScale = 1;
+        Time.timeScale = tScale;
 
         pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");            //gets all objects with tag ShowOnPause
         finishObjects = GameObject.FindGameObjectsWithTag("ShowOnFinish");          //gets all objects with tag ShowOnFinish
@@ -77,6 +81,23 @@ public class GameController : MonoBehaviour
                 yield return new WaitForSeconds(asteroidWait);
         }
     }
+	
+	 //This method handles the adding of the score
+	public void AddScore(int newScore)
+	{
+		
+		score+= newScore;
+		UpdateScore();
+		
+	}
+	
+	//This method, once called, updates the score on game screen
+	public void UpdateScore()
+	{
+	
+	 scoreText.text = "Score: " + score;
+	
+	}
 
     public void ButtonPause ()
     {
